@@ -14,8 +14,8 @@ let conn: any = null;
 const uri = process.env.MONGO_DB || "";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   if (conn == null) {
     conn = mongoose.createConnection(uri, {
       serverSelectionTimeoutMS: 5000,
