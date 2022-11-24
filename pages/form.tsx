@@ -82,7 +82,7 @@ export default function Form() {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({ msisdn, score: +min * 60000 + +second * 1000 + milSecond }),
+      body: JSON.stringify({ msisdn, score: +min * 60000 + +second * 1000 + milSecond, playerName }),
     });
     const data = await res.json();
     if (data.err) {
