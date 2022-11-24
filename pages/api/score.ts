@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         {
           score: Number,
           msisdn: String,
+          playerName: String,
         },
         {
           timestamps: true,
@@ -36,11 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
   const leaderBoard = conn.model("redbull-scores");
   if (req.method === "POST") {
-    const { score, msisdn } = req.body;
+    const { score, msisdn, playerName } = req.body;
     if (msisdn && score) {
       const record = new leaderBoard({
         score,
         msisdn,
+        playerName,
       });
       record.save((err: any, resData: any) => {
         if (resData) {
@@ -52,9 +54,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
     res.status(500);
   } else if (req.method === "GET") {
-    const leadersArray = await leaderBoard.aggregate([{ $group: { _id: "$msisdn", scores: { $push: "$score" } } }, { $sort: { scores: 1 } }, { $limit: 10 }]);
+    const leadersArray = await leaderBoard.aggregate([{ $group: { _id: "$msisdn", scores: { $push: "$score" }, names: { $push: "$playerName" } } }, { $sort: { scores: 1 } }, { $limit: 10 }]);
     const leaders = leadersArray.map((x: any) => {
-      return { msisdn: x._id, topScore: Math.max(...x.scores) };
+      return { msisdn: x._id, topScore: Math.max(...x.scores), name: x.names[0] };
     });
     res.status(200).json({ leaders });
   }
