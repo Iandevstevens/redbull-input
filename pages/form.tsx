@@ -60,18 +60,15 @@ export default function Form() {
 
   const submitPhoneNumber = async (event: any) => {
     event.preventDefault();
-    const res = await fetch(`/api/user/?msisdn=${msisdn}`, {
+    fetch(`/api/user/?msisdn=${msisdn}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-    });
-    const data = await res.json();
-    if (data.error) {
-      errorNotify("User must login through redbull");
-    } else {
-      setPlayerName(data.user.name + " " + data.user.surname);
-    }
+    })
+      .then((res) => res.json())
+      .then((data) => setPlayerName(data.user.name + " " + data.user.surname))
+      .catch((err) => errorNotify("User must login through redbull"));
   };
 
   const handleSubmit = async (event: any) => {
