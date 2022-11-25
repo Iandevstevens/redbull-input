@@ -56,7 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   } else if (req.method === "GET") {
     const leadersArray = await leaderBoard.aggregate([{ $group: { _id: "$msisdn", scores: { $push: "$score" }, names: { $push: "$playerName" } } }, { $sort: { scores: 1 } }, { $limit: 10 }]);
     const leaders = leadersArray.map((x: any) => {
-      return { msisdn: x._id, topScore: Math.max(...x.scores), name: x.names[0] };
+      return { topScore: Math.max(...x.scores), name: x.names[0] };
     });
     res.status(200).json({ leaders });
   }
