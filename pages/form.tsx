@@ -67,7 +67,14 @@ export default function Form() {
       },
     })
       .then((res) => res.json())
-      .then((data) => setPlayerName(data.user.name + " " + data.user.surname))
+      .then((data) => {
+        console.log(data);
+        if (data.error) {
+          errorNotify("User must login through redbull");
+        } else {
+          setPlayerName(data.user.name + " " + data.user.surname);
+        }
+      })
       .catch((err) => errorNotify("User must login through redbull"));
   };
 
@@ -79,7 +86,7 @@ export default function Form() {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({ msisdn, score: +min * 60000 + +second * 1000 + milSecond, playerName }),
+      body: JSON.stringify({ msisdn, score: +min * 60000 + +second * 1000 + +milSecond, playerName }),
     });
     const data = await res.json();
     if (data.err) {
@@ -92,6 +99,8 @@ export default function Form() {
       setMin("");
       setSecond("");
       setMilSecond("");
+      setPlayerName("");
+      setMsisdn("");
     }
   };
   return (
@@ -124,9 +133,9 @@ export default function Form() {
           <br />
           <br />
           <input type="submit" value="Submit" />
-          <Toaster />
         </form>
       )}
+      <Toaster />
     </div>
   );
 }
