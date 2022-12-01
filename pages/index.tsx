@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import { UserStateContext } from "./_app";
 
-const USER_NAME = "test";
-const PASSWORD = "test";
+const USER_NAME = "sebenza";
+const PASSWORD = "sebenza+redbull";
 
 export default function Home() {
   const router = useRouter();
